@@ -5,12 +5,36 @@ const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
 
 const createMovie = (req, res, next) => {
-  const { name, link } = req.body;
+  const {
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+  } = req.body;
   const ownerId = req.user._id;
-
-  Movie.create({ name, link, owner: ownerId })
-    .then((card) => {
-      res.send(card);
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+    owner: ownerId,
+  })
+    .then((movie) => {
+      res.send(movie);
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -30,14 +54,14 @@ const getMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  Movie.findById(req.params.cardId)
-    .orFail(() => new NotFoundError('Нет карточки с таким id'))
-    .then((card) => {
-      if (card.owner.toString() !== req.user._id) {
-        throw new ForbiddenError('Недостаточно прав для удаления карточки');
+  Movie.findById(req.params.movieId)
+    .orFail(() => new NotFoundError('Нет фильма с таким id'))
+    .then((movie) => {
+      if (movie.owner.toString() !== req.user._id) {
+        throw new ForbiddenError('Недостаточно прав для удаления фильма');
       }
-      Movie.deleteOne(card).then(() => {
-        res.send({ card });
+      Movie.deleteOne(movie).then(() => {
+        res.send({ movie });
       })
         .catch(next);
     })
