@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const cardSchema = new mongoose.Schema({
+const movieSchema = new mongoose.Schema({
   country: {
     type: String,
     required: true,
@@ -55,7 +55,7 @@ const cardSchema = new mongoose.Schema({
     ref: 'user',
   },
   movieId: {
-    // ???
+    type: Number,
     required: true,
   },
   nameRU: {
@@ -66,6 +66,10 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
-module.exports = mongoose.model('card', cardSchema);
+module.exports = mongoose.model('movie', movieSchema);
