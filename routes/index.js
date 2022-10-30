@@ -5,7 +5,6 @@ const routerMovies = require('./movies');
 const auth = require('../middlewares/auth');
 const NotFoundError = require('../errors/NotFoundError');
 const { createUser, login } = require('../controllers/users');
-const regExp = require('../utils/regexp');
 
 router.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -17,8 +16,6 @@ router.post('/signin', celebrate({
 router.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(regExp),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
