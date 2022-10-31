@@ -54,7 +54,7 @@ const getMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  Movie.findById(req.params.movieId)
+  Movie.findById(req.params._id)
     .orFail(() => new NotFoundError('Нет фильма с таким id'))
     .then((movie) => {
       if (movie.owner.toString() !== req.user._id) {
