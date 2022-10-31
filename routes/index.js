@@ -24,7 +24,7 @@ router.post('/signup', celebrate({
 router.use(auth);
 
 router.use('/users', routerUsers);
-router.use('/cards', routerMovies);
+router.use('/movies', routerMovies);
 
 router.use('*', () => {
   throw new NotFoundError('Ошибка 404');

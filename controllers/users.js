@@ -11,12 +11,12 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const createUser = (req, res, next) => {
   const {
-    email, password, name,
+    name, email, password,
   } = req.body;
 
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
-      email, password: hash, name,
+      name, email, password: hash,
     }))
     .then((user) => {
       const userNoPassword = user.toObject();
