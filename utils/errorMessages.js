@@ -8,4 +8,4 @@ module.exports.forbiddenErrorMessage = 'Недостаточно прав для
 
 module.exports.notFoundErrorMessage = 'Неверный id';
 
-module.exports.unauthorizedErrorMessage = 'Неверный email или пароль';
+module.exports.unauthorizedErrorMessage = 'Ошибка авторизация';
