@@ -1,7 +1,9 @@
 # movies-explorer-api
 
-Учимся работать с ветками
+Ссылки на прект:
 
-Добавим ветку level-1
+IP 84.252.129.58
 
-Внесем изменения и закоммитим из ветки level-1
+Frontend https://artem-movies.nomoredomains.icu/
+
+Backend https://api.artem-movies.nomoredomains.icu/
