@@ -6,8 +6,13 @@ const DataError = require('../errors/DataError');
 const ErrorConflict = require('../errors/ErrorConflict');
 const NotFoundError = require('../errors/NotFoundError');
 const UnauthorizedError = require('../errors/UnauthorizedError');
-
-const { NODE_ENV, JWT_SECRET } = process.env;
+const {
+  dataErrorMessage,
+  notFoundErrorMessage,
+  unauthorizedErrorMessage,
+  errorConflictMessage,
+} = require('../utils/errorMessages');
+const { JWT_SECRET } = require('../utils/config');
 
 const createUser = (req, res, next) => {
   const {
@@ -24,10 +29,10 @@ const createUser = (req, res, next) => {
       res.send(userNoPassword);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new DataError('Неверные данные'));
+      if (err.name === 'ValidationError') {
+        next(new DataError(dataErrorMessage));
       } else if (err.code === 11000) {
-        next(new ErrorConflict('Пользователь с таким email уже существует'));
+        next(new ErrorConflict(errorConflictMessage));
       } else {
         next(err);
       }
@@ -38,13 +43,13 @@ const getUserMe = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(notFoundErrorMessage);
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new DataError('Неверные данные'));
+        next(new DataError(dataErrorMessage));
       } else {
         next(err);
       }
@@ -64,13 +69,15 @@ const updateProfile = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(notFoundErrorMessage);
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new DataError('Неверные данные'));
+        next(new DataError(dataErrorMessage));
+      } else if (err.code === 11000) {
+        next(new ErrorConflict(errorConflictMessage));
       } else {
         next(err);
       }
@@ -84,16 +91,16 @@ const login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new UnauthorizedError('Пользователь с таки email не загеристрирован');
+        throw new UnauthorizedError(unauthorizedErrorMessage);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
             // хеши не совпали — отклоняем промис
-            throw new UnauthorizedError('Неверный email или пароль');
+            throw new UnauthorizedError(unauthorizedErrorMessage);
           }
           // аутентификация успешна
-          const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', {
+          const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
             expiresIn: '7d',
           });
           res.status(200).send({ token });
