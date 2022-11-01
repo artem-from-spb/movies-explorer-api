@@ -11,7 +11,7 @@ const rateLimiter = require('./middlewares/rateLimiter');
 const routes = require('./routes/index');
 const defaultErrorHandler = require('./middlewares/defaultErrorHandler');
 
-const { DATA_BASE } = require('./utils/config');
+// const { DATA_BASE } = require('./utils/config');
 
 const { PORT = 3000 } = process.env;
 
@@ -21,7 +21,7 @@ app.use(cors());
 
 // Mongoose 6 always behaves as if useNewUrlParser
 // and useCreateIndex are true, and useFindAndModify is false.
-mongoose.connect(DATA_BASE);
+mongoose.connect('mongodb://127.0.0.1:27017/moviesdb');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
