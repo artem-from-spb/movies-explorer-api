@@ -11,7 +11,9 @@ const rateLimiter = require('./middlewares/rateLimiter');
 const routes = require('./routes/index');
 const defaultErrorHandler = require('./middlewares/defaultErrorHandler');
 
-const { DATA_BASE, PORT } = require('./utils/config');
+const { DATA_BASE } = require('./utils/config');
+
+const { PORT = 3000 } = process.env;
 
 const app = express();
 
