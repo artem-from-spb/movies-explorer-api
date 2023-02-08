@@ -7,5 +7,5 @@ const {
 
 module.exports = {
   JWT_SECRET: (NODE_ENV === 'production') ? JWT_SECRET : 'some-secret-key',
-  DATA_BASE: 'mongodb://127.0.0.1:27017/moviesdb',
+  DATA_BASE: 'mongodb://localhost:27017/moviesdb',
 };

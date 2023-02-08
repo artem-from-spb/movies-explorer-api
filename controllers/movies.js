@@ -21,7 +21,7 @@ const createMovie = (req, res, next) => {
     nameRU,
     nameEN,
     thumbnail,
-    movieId,
+    id,
   } = req.body;
   const ownerId = req.user._id;
   Movie.create({
@@ -35,7 +35,7 @@ const createMovie = (req, res, next) => {
     nameRU,
     nameEN,
     thumbnail,
-    movieId,
+    id,
     owner: ownerId,
   })
     .then((movie) => {
@@ -51,10 +51,8 @@ const createMovie = (req, res, next) => {
 };
 
 const getMovie = (req, res, next) => {
-  Movie.find({ owner: req.user._id })
-    .then((list) => {
-      res.send(list);
-    })
+  Movie.find({})
+    .then((movies) => res.send(movies))
     .catch(next);
 };
 
@@ -62,12 +60,13 @@ const deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
     .orFail(() => new NotFoundError(notFoundErrorMessage))
     .then((movie) => {
-      if (movie.owner.toString() !== req.user._id) {
+      if (movie.owner.toString() !== req.user._id.toString()) {
         throw new ForbiddenError(forbiddenErrorMessage);
       }
-      Movie.deleteOne(movie).then(() => {
-        res.send({ movie });
-      })
+      movie.remove()
+        .then((movieDeleted) => {
+          res.send(movieDeleted);
+        })
         .catch(next);
     })
     .catch(next);

@@ -21,12 +21,10 @@ router.post(
       year: Joi.string().required(),
       description: Joi.string().required(),
       image: Joi.string()
-        .required().pattern(regExp),
+        .required(),
       trailerLink: Joi.string()
         .required().pattern(regExp),
-      thumbnail: Joi.string()
-        .required().pattern(regExp),
-      movieId: Joi.number().required(),
+      id: Joi.number(),
       nameRU: Joi.string().required(),
       nameEN: Joi.string().required(),
     }),
